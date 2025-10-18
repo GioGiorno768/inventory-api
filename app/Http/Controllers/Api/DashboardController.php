@@ -11,10 +11,12 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-
-    public function stats()
+    public function stats(Request $request)
     {
         $user = auth()->user();
+        
+        // Get days parameter (default 7, max 90)
+        $days = min((int) $request->get('days', 7), 90);
 
         // Total items
         $totalItems = Item::count();
@@ -52,9 +54,9 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Chart data - last 7 days
-        $last7Days = collect(range(6, 0))->map(function ($days) use ($user) {
-            $date = Carbon::today()->subDays($days);
+        // Chart data - Dynamic days
+        $chartData = collect(range($days - 1, 0))->map(function ($daysAgo) use ($user) {
+            $date = Carbon::today()->subDays($daysAgo);
             
             $transactionsIn = Transaction::where('type', 'in')
                 ->when($user->role === 'staff', function($q) use ($user) {
@@ -73,10 +75,10 @@ class DashboardController extends Controller
             return [
                 'date' => $date->format('Y-m-d'),
                 'day' => $date->format('D'),
-                'in' => $transactionsIn,
-                'out' => $transactionsOut,
+                'in' => (int) $transactionsIn,
+                'out' => (int) $transactionsOut,
             ];
-        });
+        })->values();
 
         return response()->json([
             'summary' => [
@@ -89,7 +91,8 @@ class DashboardController extends Controller
             ],
             'low_stock_items' => $lowStockItems,
             'recent_transactions' => $recentTransactions,
-            'chart_data' => $last7Days,
+            'chart_data' => $chartData,
+            'chart_days' => $days,
         ]);
     }
 
