@@ -15,8 +15,8 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         
-        // Get days parameter (default 7, max 90)
-        $days = min((int) $request->get('days', 7), 90);
+        // Get days parameter (default 30, max 90)
+        $days = min((int) $request->get('days', 30), 90);
 
         // Total items
         $totalItems = Item::count();
@@ -54,31 +54,52 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Chart data - Dynamic days
-        $chartData = collect(range($days - 1, 0))->map(function ($daysAgo) use ($user) {
-            $date = Carbon::today()->subDays($daysAgo);
+        // Chart data - DYNAMIC (semua transaksi dalam X hari terakhir)
+        $startDate = Carbon::today()->subDays($days - 1);
+        $endDate = Carbon::today();
+
+        // Get all transactions in date range
+        $transactionsInRange = Transaction::query()
+            ->when($user->role === 'staff', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->whereBetween('date', [$startDate, $endDate])
+            ->select(
+                DB::raw('DATE(date) as transaction_date'),
+                'type',
+                DB::raw('SUM(quantity) as total_quantity')
+            )
+            ->groupBy('transaction_date', 'type')
+            ->get();
+
+        // Create array untuk semua tanggal dalam range
+        $chartData = collect();
+        $currentDate = $startDate->copy();
+        
+        while ($currentDate <= $endDate) {
+            $dateStr = $currentDate->format('Y-m-d');
             
-            $transactionsIn = Transaction::where('type', 'in')
-                ->when($user->role === 'staff', function($q) use ($user) {
-                    $q->where('user_id', $user->id);
-                })
-                ->whereDate('date', $date)
-                ->sum('quantity');
-
-            $transactionsOut = Transaction::where('type', 'out')
-                ->when($user->role === 'staff', function($q) use ($user) {
-                    $q->where('user_id', $user->id);
-                })
-                ->whereDate('date', $date)
-                ->sum('quantity');
-
-            return [
-                'date' => $date->format('Y-m-d'),
-                'day' => $date->format('D'),
-                'in' => (int) $transactionsIn,
-                'out' => (int) $transactionsOut,
-            ];
-        })->values();
+            // Cari transaksi IN untuk tanggal ini
+            $inQty = $transactionsInRange
+                ->where('transaction_date', $dateStr)
+                ->where('type', 'in')
+                ->sum('total_quantity');
+            
+            // Cari transaksi OUT untuk tanggal ini
+            $outQty = $transactionsInRange
+                ->where('transaction_date', $dateStr)
+                ->where('type', 'out')
+                ->sum('total_quantity');
+            
+            $chartData->push([
+                'date' => $dateStr,
+                'day' => $currentDate->format('D'),
+                'in' => (int) $inQty,
+                'out' => (int) $outQty,
+            ]);
+            
+            $currentDate->addDay();
+        }
 
         return response()->json([
             'summary' => [
@@ -91,8 +112,12 @@ class DashboardController extends Controller
             ],
             'low_stock_items' => $lowStockItems,
             'recent_transactions' => $recentTransactions,
-            'chart_data' => $chartData,
-            'chart_days' => $days,
+            'chart_data' => $chartData->values(),
+            'chart_period' => [
+                'start' => $startDate->format('Y-m-d'),
+                'end' => $endDate->format('Y-m-d'),
+                'days' => $days,
+            ],
         ]);
     }
 
