@@ -1,66 +1,333 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📦 Smart Inventory Management System - Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 
-## About Laravel
+RESTful API untuk sistem manajemen inventori barang dengan fitur autentikasi multi-role, CRUD lengkap, transaksi real-time, dan export laporan PDF.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- ✅ **JWT Authentication** - Secure token-based authentication
+- ✅ **Multi-Role Authorization** - Admin & Staff dengan hak akses berbeda
+- ✅ **CRUD Operations** - Manajemen Barang, Transaksi, User
+- ✅ **Auto Stock Update** - Stok otomatis update saat transaksi
+- ✅ **PDF Reports** - Export laporan dalam format PDF
+- ✅ **Real-time Dashboard** - Statistik dan visualisasi data
+- ✅ **Low Stock Alert** - Notifikasi barang stok rendah
+- ✅ **Activity Logging** - Catat semua aktivitas user
+- ✅ **API Documentation** - Dokumentasi lengkap endpoint
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📋 Tech Stack
 
-## Learning Laravel
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Laravel | 11.x | PHP Framework |
+| MySQL | 8.0+ | Database |
+| JWT Auth | tymon/jwt-auth | Authentication |
+| DOMPDF | barryvdh/laravel-dompdf | PDF Generator |
+| Eloquent ORM | Built-in | Database ORM |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🛠️ Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
 
-## Laravel Sponsors
+- PHP >= 8.2
+- Composer
+- MySQL >= 8.0
+- Node.js & NPM (optional, for Laravel Mix)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Step 1: Clone Repository
 
-### Premium Partners
+```bash
+git clone https://github.com/GioGiorno768/inventory-api.git
+cd inventory-api
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Step 2: Install Dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Step 3: Environment Configuration
 
-## Code of Conduct
+```bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Edit `.env` file:
 
-## Security Vulnerabilities
+```env
+APP_NAME="Smart Inventory API"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=inventory_db
+DB_USERNAME=root
+DB_PASSWORD=
 
-## License
+JWT_SECRET=
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+
+### Step 4: Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### Step 5: Generate JWT Secret
+
+```bash
+php artisan jwt:secret
+```
+
+### Step 6: Database Setup
+
+```bash
+# Create database
+mysql -u root -p
+CREATE DATABASE inventory_db;
+exit;
+
+# Run migrations
+php artisan migrate
+
+# Seed initial data
+php artisan db:seed
+```
+
+### Step 7: Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### Step 8: Run Server
+
+```bash
+php artisan serve
+```
+
+API akan berjalan di `http://127.0.0.1:8000`
+
+## 🗄️ Database Schema
+
+### Users Table
+```sql
+- id (PK)
+- name
+- email (unique)
+- password (hashed)
+- role (enum: admin, staff)
+- created_at
+- updated_at
+```
+
+### Items Table
+```sql
+- id (PK)
+- name
+- category
+- stock
+- unit
+- threshold
+- created_at
+- updated_at
+```
+
+### Transactions Table
+```sql
+- id (PK)
+- item_id (FK)
+- user_id (FK)
+- type (enum: in, out)
+- quantity
+- date
+- file_path (nullable)
+- file_public_id (nullable)
+- description (nullable)
+- created_at
+- updated_at
+```
+
+## 🔐 Authentication
+
+### Login
+
+**POST** `/api/login`
+
+```json
+{
+  "email": "admin@inventory.com",
+  "password": "admin123"
+}
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "user": {
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@inventory.com",
+    "role": "admin"
+  }
+}
+```
+
+### Default Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@inventory.com | admin123 |
+| Staff | staff@inventory.com | staff123 |
+
+## 📡 API Endpoints
+
+### Authentication
+```
+POST   /api/login              # Login user
+POST   /api/logout             # Logout user
+POST   /api/refresh            # Refresh token
+GET    /api/me                 # Get current user
+```
+
+### Items (Barang)
+```
+GET    /api/items              # Get all items (with pagination, search, filter)
+GET    /api/items/{id}         # Get item detail
+POST   /api/items              # Create item (Admin only)
+PUT    /api/items/{id}         # Update item (Admin only)
+DELETE /api/items/{id}         # Delete item (Admin only)
+GET    /api/items/low-stock    # Get low stock items
+GET    /api/items/categories   # Get all categories
+```
+
+### Transactions
+```
+GET    /api/transactions       # Get all transactions (with filter)
+GET    /api/transactions/{id}  # Get transaction detail
+POST   /api/transactions       # Create transaction
+DELETE /api/transactions/{id}  # Delete transaction (Admin only)
+```
+
+### Dashboard
+```
+GET    /api/dashboard?days=30  # Get dashboard statistics
+GET    /api/activity-log       # Get activity log (Admin only)
+```
+
+### Reports (Admin only)
+```
+GET    /api/reports/items/pdf              # Export items report
+GET    /api/reports/transactions/pdf       # Export transactions report
+GET    /api/reports/stock/pdf              # Export stock report
+```
+
+### Users (Admin only)
+```
+GET    /api/users              # Get all users
+GET    /api/users/{id}         # Get user detail
+POST   /api/users              # Create user
+PUT    /api/users/{id}         # Update user
+DELETE /api/users/{id}         # Delete user
+```
+
+## 🔒 Authorization
+
+### Middleware
+
+**auth:api** - Require authentication
+```php
+Route::middleware('auth:api')->group(function () {
+    // Protected routes
+});
+```
+
+**role:admin** - Admin only
+```php
+Route::middleware(['auth:api', 'role:admin'])->group(function () {
+    // Admin only routes
+});
+```
+
+### Permission Matrix
+
+| Endpoint | Admin | Staff |
+|----------|-------|-------|
+| GET /items | ✅ | ✅ |
+| POST /items | ✅ | ❌ |
+| PUT /items | ✅ | ❌ |
+| DELETE /items | ✅ | ❌ |
+| POST /transactions | ✅ | ✅ |
+| DELETE /transactions | ✅ | ❌ |
+| GET /reports/* | ✅ | ❌ |
+| /users/* | ✅ | ❌ |
+
+## 📊 Business Logic
+
+### Stock Update Logic
+
+**Barang Masuk (IN):**
+```php
+$item->stock += $transaction->quantity;
+```
+
+**Barang Keluar (OUT):**
+```php
+// Validation
+if ($item->stock < $transaction->quantity) {
+    throw new Exception('Stok tidak mencukupi');
+}
+$item->stock -= $transaction->quantity;
+```
+
+### Low Stock Detection
+
+```php
+$lowStockItems = Item::whereColumn('stock', '<=', 'threshold')->get();
+```
+
+## 🧪 Testing
+
+### Manual Testing with Postman
+
+1. Import Postman collection (coming soon)
+2. Set environment variables:
+   - `base_url`: http://127.0.0.1:8000/api
+   - `token`: (akan diisi otomatis setelah login)
+
+### Test Scenarios
+
+```bash
+# Test authentication
+POST /api/login
+
+# Test get items
+GET /api/items
+
+# Test create transaction
+POST /api/transactions
+- item_id: 1
+- type: in
+- quantity: 10
+- date: 2025-10-20
+
+# Test PDF export
+GET /api/reports/items/pdf
+```
+
+
+---
